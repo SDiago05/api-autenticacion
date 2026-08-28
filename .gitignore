@@ -1,0 +1,13 @@
+# Dependencias
+node_modules/
+
+# Variables de entorno reales (no se sube al repositorio)
+.env
+
+# Base de datos generada en tiempo de ejecucion
+database.sqlite
+
+# Archivos de sistema y logs
+.DS_Store
+npm-debug.log
+*.log
