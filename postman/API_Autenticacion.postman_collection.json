@@ -1,0 +1,72 @@
+{
+  "info": {
+    "name": "API Autenticacion - GA7-220501096-AA5",
+    "description": "Coleccion de pruebas para el servicio web de registro e inicio de sesion.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "base_url", "value": "http://localhost:3000" }
+  ],
+  "item": [
+    {
+      "name": "Registro - Exitoso",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"usuario\": \"juanperez\",\n  \"contrasena\": \"Clave1234\"\n}"
+        },
+        "url": { "raw": "{{base_url}}/api/auth/registro", "host": ["{{base_url}}"], "path": ["api", "auth", "registro"] }
+      }
+    },
+    {
+      "name": "Registro - Usuario duplicado (error)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"usuario\": \"juanperez\",\n  \"contrasena\": \"Clave1234\"\n}"
+        },
+        "url": { "raw": "{{base_url}}/api/auth/registro", "host": ["{{base_url}}"], "path": ["api", "auth", "registro"] }
+      }
+    },
+    {
+      "name": "Login - Autenticacion satisfactoria",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"usuario\": \"juanperez\",\n  \"contrasena\": \"Clave1234\"\n}"
+        },
+        "url": { "raw": "{{base_url}}/api/auth/login", "host": ["{{base_url}}"], "path": ["api", "auth", "login"] }
+      }
+    },
+    {
+      "name": "Login - Error en la autenticacion (clave incorrecta)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"usuario\": \"juanperez\",\n  \"contrasena\": \"claveIncorrecta\"\n}"
+        },
+        "url": { "raw": "{{base_url}}/api/auth/login", "host": ["{{base_url}}"], "path": ["api", "auth", "login"] }
+      }
+    },
+    {
+      "name": "Login - Usuario no existe (error)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"usuario\": \"noexiste\",\n  \"contrasena\": \"Clave1234\"\n}"
+        },
+        "url": { "raw": "{{base_url}}/api/auth/login", "host": ["{{base_url}}"], "path": ["api", "auth", "login"] }
+      }
+    }
+  ]
+}
