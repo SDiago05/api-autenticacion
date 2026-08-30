@@ -1,25 +1,2 @@
 ENLACE DEL REPOSITORIO
-========================================================================
-El proyecto ya tiene un repositorio Git LOCAL inicializado (carpeta .git)
-con el historial de commits del desarrollo.
-
-Para cumplir el requisito de "herramientas de versionamiento" con un
-repositorio en la nube, sigue estos pasos (2 minutos):
-
-1. Crea una cuenta gratuita en https://github.com (si no tienes una).
-2. Crea un repositorio nuevo VACÍO llamado, por ejemplo: api-autenticacion
-   (no marques "Add a README", ya tenemos uno).
-3. Abre una terminal dentro de esta carpeta (api-autenticacion) y ejecuta:
-
-   git remote add origin https://github.com/TU_USUARIO/api-autenticacion.git
-   git branch -M main
-   git push -u origin main
-
-4. Copia la URL de tu repositorio (la que aparece en GitHub) y pégala aquí
-   abajo, y luego incluye este archivo actualizado en el ZIP de entrega:
-
-Enlace del repositorio: https://github.com/TU_USUARIO/api-autenticacion
-
-========================================================================
-Alternativa: también puedes usar GitLab (https://gitlab.com) siguiendo
-los mismos pasos, solo cambia la URL remota.
+https://github.com/SDiago05/api-autenticacion.git
