@@ -75,4 +75,4 @@ git push -u origin main
 
 ## Autor
 
-TU_NOMBRE_APELLIDO — Evidencia GA7-220501096-AA5-EV01 / EV02
+Joan Sebastian Diago — Evidencia GA7-220501096-AA5-EV01 / EV02
