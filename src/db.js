@@ -1,31 +1,56 @@
 // db.js
 // -----------------------------------------------------------------------
-// Este archivo se encarga de crear la conexion a la base de datos SQLite
-// y de asegurar que la tabla "usuarios" exista antes de que la API la use.
-// Se usa SQLite porque es una base de datos liviana que no requiere
-// instalar un servidor aparte, ideal para un proyecto academico/demo.
+// Este archivo se encarga de "persistir" los usuarios registrados.
+// Para mantener el proyecto simple y sin dependencias nativas que haya
+// que compilar (como better-sqlite3, que requiere Visual Studio Build
+// Tools en Windows), se usa un archivo JSON como base de datos.
+// Se exponen funciones sencillas que imitan lo que haria una base de
+// datos real: buscar por usuario, insertar y listar.
 // -----------------------------------------------------------------------
 
-const Database = require('better-sqlite3');
+const fs = require('fs');
 const path = require('path');
 
-// Se crea (o se abre si ya existe) el archivo database.sqlite en la raiz del proyecto
-const dbPath = path.join(__dirname, '..', 'database.sqlite');
-const db = new Database(dbPath);
+// Ruta del archivo que actua como "base de datos"
+const dbPath = path.join(__dirname, '..', 'usuarios.json');
 
-// Sentencia SQL para crear la tabla de usuarios si no existe todavia.
-// - id: identificador unico autoincremental
-// - usuario: nombre de usuario, debe ser unico (no se pueden repetir)
-// - contrasena: aqui NUNCA se guarda en texto plano, se guarda ya cifrada (hash)
-// - fecha_creacion: fecha en la que el usuario se registro
-db.exec(`
-  CREATE TABLE IF NOT EXISTS usuarios (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    usuario TEXT UNIQUE NOT NULL,
-    contrasena TEXT NOT NULL,
-    fecha_creacion TEXT DEFAULT CURRENT_TIMESTAMP
-  )
-`);
+// Si el archivo no existe todavia (primera vez que se ejecuta el proyecto),
+// se crea con un arreglo vacio.
+if (!fs.existsSync(dbPath)) {
+  fs.writeFileSync(dbPath, JSON.stringify([], null, 2));
+}
 
-// Se exporta la conexion para que los demas archivos (controladores) puedan usarla
-module.exports = db;
+// Lee y devuelve todos los usuarios guardados actualmente en el archivo
+function leerUsuarios() {
+  const contenido = fs.readFileSync(dbPath, 'utf-8');
+  return JSON.parse(contenido);
+}
+
+// Sobrescribe el archivo con la lista de usuarios actualizada
+function guardarUsuarios(usuarios) {
+  fs.writeFileSync(dbPath, JSON.stringify(usuarios, null, 2));
+}
+
+// Busca un usuario por su nombre de usuario. Devuelve el objeto encontrado
+// o undefined si no existe.
+function buscarPorUsuario(nombreUsuario) {
+  const usuarios = leerUsuarios();
+  return usuarios.find((u) => u.usuario === nombreUsuario);
+}
+
+// Inserta un nuevo usuario (con la contrasena ya cifrada) y devuelve el
+// registro creado, incluyendo un id autoincremental sencillo.
+function insertarUsuario(usuario, contrasenaHasheada) {
+  const usuarios = leerUsuarios();
+  const nuevoUsuario = {
+    id: usuarios.length > 0 ? usuarios[usuarios.length - 1].id + 1 : 1,
+    usuario,
+    contrasena: contrasenaHasheada,
+    fecha_creacion: new Date().toISOString(),
+  };
+  usuarios.push(nuevoUsuario);
+  guardarUsuarios(usuarios);
+  return nuevoUsuario;
+}
+
+module.exports = { buscarPorUsuario, insertarUsuario };

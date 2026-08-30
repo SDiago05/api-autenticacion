@@ -7,7 +7,7 @@
 
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const db = require('../db');
+const { buscarPorUsuario, insertarUsuario } = require('../db');
 
 // Numero de "rondas" que usa bcrypt para generar el hash. A mayor numero,
 // mas seguro pero mas lento. 10 es un valor estandar recomendado.
@@ -23,9 +23,7 @@ function registrar(req, res) {
 
   try {
     // Se verifica si el usuario ya existe para evitar duplicados
-    const existente = db
-      .prepare('SELECT id FROM usuarios WHERE usuario = ?')
-      .get(usuario);
+    const existente = buscarPorUsuario(usuario);
 
     if (existente) {
       return res.status(409).json({
@@ -37,15 +35,13 @@ function registrar(req, res) {
     // Se genera el hash de la contrasena (cifrado unidireccional)
     const hashContrasena = bcrypt.hashSync(contrasena, SALT_ROUNDS);
 
-    // Se inserta el nuevo usuario en la tabla "usuarios"
-    const resultado = db
-      .prepare('INSERT INTO usuarios (usuario, contrasena) VALUES (?, ?)')
-      .run(usuario, hashContrasena);
+    // Se inserta el nuevo usuario en el archivo que actua como base de datos
+    const nuevoUsuario = insertarUsuario(usuario, hashContrasena);
 
     return res.status(201).json({
       exito: true,
       mensaje: 'Usuario registrado exitosamente.',
-      datos: { id: resultado.lastInsertRowid, usuario },
+      datos: { id: nuevoUsuario.id, usuario: nuevoUsuario.usuario },
     });
   } catch (error) {
     // Cualquier error inesperado (ej: fallo de base de datos) se captura aqui
@@ -68,9 +64,7 @@ function iniciarSesion(req, res) {
 
   try {
     // Se busca el usuario en la base de datos
-    const registro = db
-      .prepare('SELECT * FROM usuarios WHERE usuario = ?')
-      .get(usuario);
+    const registro = buscarPorUsuario(usuario);
 
     // Si el usuario no existe, se responde con error de autenticacion.
     // (No se especifica si fue el usuario o la contrasena, por seguridad)

@@ -10,7 +10,7 @@ Servicio web REST construido con **Node.js + Express** que permite:
    - Mensaje de **"Autenticacion satisfactoria"** + token JWT, si las credenciales son correctas.
    - Mensaje de **"Error en la autenticacion"**, si son incorrectas.
 
-Las contraseñas se almacenan cifradas con `bcryptjs` (nunca en texto plano) y se guardan en una base de datos **SQLite** (`database.sqlite`, se crea automáticamente al iniciar el servidor).
+Las contraseñas se almacenan cifradas con `bcryptjs` (nunca en texto plano) y se guardan en un archivo **`usuarios.json`** que se crea automáticamente al iniciar el servidor (no requiere instalar ni compilar ninguna base de datos).
 
 ## Estructura del proyecto
 

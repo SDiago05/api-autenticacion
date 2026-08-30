@@ -5,7 +5,7 @@ node_modules/
 .env
 
 # Base de datos generada en tiempo de ejecucion
-database.sqlite
+usuarios.json
 
 # Archivos de sistema y logs
 .DS_Store
